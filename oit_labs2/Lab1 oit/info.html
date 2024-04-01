@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="info.css">
+    <link rel="stylesheet" href="modal.css">
+    <title>Document</title>
+    <style>
+        .filters {
+            list-style: none;
+            padding: 0;
+            display: flex;
+        }
+        .filters li {
+            margin-right: 20px;
+        }
+        .filters li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+        .filters li a:hover {
+            color: #ff9900;
+        }
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .card {
+            margin: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            text-align: center;
+        }
+        .card img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <nav class="nav">
+            <div class="search">
+                <input type="text" placeholder="Пошук">
+            </div>
+            <ul class="list">
+                <li class="element"><a href="./index.html">Головна</a></li>
+                <li class="element"><a href="./news.html">Новини</a></li>
+                <li class="element"><a href="./info.html" class="active">Інформація</a></li>
+                <li class="element"><a href="javascript:void(0);" onclick="openRegistrationForm()">Ваш кабінет</a>
+                </li>
+            </ul>
+            <div class="dropdown">
+                <button class="dropbtn">Країна</button>
+                <div class="dropdown-content">
+                    <a href="#">Україна</a>
+                    <a href="#">Сполучені Штати Коломії</a>
+                    <a href="#">Польща</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="filter-panel">
+            <h2>Фільтри</h2>
+            <ul class="filters">
+                <li><a href="#" onclick="filterProducts('dogs')">Пси</a></li>
+                <li><a href="#" onclick="filterProducts('cats')">Котяри</a></li>
+                <!-- Додайте інші можливі фільтри тут -->
+            </ul>
+        </div>
+        <div class="cards-container" id="cardsContainer">
+            <!-- Іконки товарів будуть додані динамічно за допомогою JavaScript -->
+        </div>
+    </main>
+    <footer>
+        <a href="tel:+380660238467" class="phone-number">+380660238467</a>
+        <div class="footer-text">© 2023 ЗооКоломия. Усі права захищені.</div>
+    </footer>
+    <div id="registrationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRegistrationForm()">&times;</span>
+            <h2>Підписка на розсилку</h2>
+            <p>Підпишіться на нашу розсилку, щоб отримувати останні новини та пропозиції!</p>
+            <button onclick="closeRegistrationForm()">Підписатись</button>
+            <button onclick="closeRegistrationForm()">Відхилити</button>
+        </div>
+    </div>
+    <div id="advertisementModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAdvertisementModal()">&times;</span>
+            <h2>Реклама</h2>
+            <p>Тут може бути ваша реклама!</p>
+        </div>
+    </div>
+</div>
+<script>
+    function openRegistrationForm() {
+        document.getElementById('registrationModal').style.display = 'block';
+    }
+
+    function closeRegistrationForm() {
+        document.getElementById('registrationModal').style.display = 'none';
+        // Зберігаємо інформацію про те, що користувач підписався на розсилку в локальному сховищі
+        localStorage.setItem('subscription', 'true');
+    }
+
+    function closeAdvertisementModal() {
+        document.getElementById('advertisementModal').style.display = 'none';
+    }
+
+    var products = [
+        { name: 'Бабай', image: './psy/pes1.jpeg', category: 'dogs' },
+        { name: 'Небіс', image: './psy/pes2.jpeg', category: 'dogs' },
+        { name: 'Гоша', image: './psy/pes3.jpg', category: 'dogs' },
+        { name: 'Вуйко', image: './psy/pes4.png', category: 'dogs' },
+        { name: 'Лампас', image: './psy/pes5.jpg', category: 'dogs' },
+        { name: 'Кулініч', image: './psy/pes6.jpg', category: 'dogs' },
+        { name: 'Шугайстер', image: 'cawts/boogacawt.png', category: 'cats' },
+        { name: 'Буґа', image: 'cawts/cawtooga.jpeg', category: 'cats' },
+        { name: 'Ґуґа', image: 'cawts/googacawt.png', category: 'cats' },
+        { name: 'Шляпа', image: 'cawts/okcat.jpg', category: 'cats' },
+        { name: 'Кубас', image: 'cawts/omg cat.jpg', category: 'cats' },
+        { name: 'Паскуда', image: 'cawts/paskudacat.jpg', category: 'cats' },
+        // Додайте інші товари тут
+    ];
+
+    function filterProducts(category) {
+        var cardsContainer = document.getElementById('cardsContainer');
+        cardsContainer.innerHTML = '';
+
+        products.forEach(function (product) {
+            if (category === 'all' || product.category === category) {
+                var card = document.createElement('div');
+                card.classList.add('card');
+
+                var image = document.createElement('img');
+                image.src = product.image;
+                image.alt = product.name;
+
+                var productName = document.createElement('h3');
+                productName.textContent = product.name;
+
+                card.appendChild(image);
+                card.appendChild(productName);
+                cardsContainer.appendChild(card);
+            }
+        });
+    }
+
+    // Викликаємо функцію filterProducts() одразу при завантаженні сторінки, щоб показати всі товари
+    window.onload = function () {
+        filterProducts('all');
+
+        // Перевіряємо, чи користувач вже підписаний на розсилку
+        var isSubscribed = localStorage.getItem('subscription');
+        if (!isSubscribed) {
+            // Показуємо немодальне вікно через певний час
+            setTimeout(function() {
+                openRegistrationForm();
+            }, 5000); // 5000 мілісекунд = 5 секунд
+        }
+
+        // Показуємо модальне вікно з рекламою через певний час або при прокрутці до певного місця на сторінці
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 100) { // При прокрутці вниз до певного місця (наприклад, 500 пікселів)
+                document.getElementById('advertisementModal').style.display = 'block';
+                // Після 10 секунд закриваємо модальне вікно
+                setTimeout(function() {
+                    closeAdvertisementModal();
+                }, 2000); // 10000 мілісекунд = 10 секунд
+            }
+        });
+    };
+</script>
+</body>
+</html>
